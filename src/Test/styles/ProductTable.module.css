@@ -1,0 +1,42 @@
+.tableContainer {
+    overflow-x: auto;
+  }
+  
+  .table {
+    width: 100%;
+    border-collapse: collapse;
+    text-align: left;
+  }
+  
+  .table th, .table td {
+    padding: 8px;
+    border: 1px solid #ddd;
+  }
+  
+  .table th {
+    background-color: #343a40;
+    color: #fff;
+  }
+  
+  .textRight {
+    text-align: right;
+  }
+  
+  .priceInput {
+    width: 60px;
+    text-align: right;
+  }
+  
+  .removeButton {
+    background-color: #dc3545;
+    color: #fff;
+    border: none;
+    padding: 5px 10px;
+    cursor: pointer;
+  }
+  
+  .total {
+    font-weight: bold;
+  }
+  
+      

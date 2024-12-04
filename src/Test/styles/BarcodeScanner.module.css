@@ -1,0 +1,67 @@
+.container {
+    font-family: system-ui;
+    text-align: left;
+    width: 80%;
+    margin: 0 auto;
+  }
+  
+  .row {
+    margin-bottom: 20px;
+  }
+  
+  .starPrimary {
+    border-top: 1px solid #000;
+    width: 100%;
+  }
+  
+  .inputField {
+    margin-top: 20px;
+  }
+  
+  .ean {
+    background-color: #666;
+    color: #FFF;
+    margin-right: 10px;
+  }
+  
+  .scanButton, .addProductButton {
+    background-color: #dc3545;
+    color: #fff;
+    border: none;
+    padding: 5px 10px;
+    margin-right: 10px;
+    cursor: pointer;
+  }
+  
+  .addProductButton {
+    background-color: #343a40;
+  }
+  
+  .overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.7);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+  
+  .overlayContent {
+    background-color: #fff;
+    padding: 20px;
+    border-radius: 5px;
+  }
+  
+  .closeOverlay {
+    background-color: #dc3545;
+    color: #fff;
+    border: none;
+    padding: 5px 10px;
+    margin-top: 10px;
+    cursor: pointer;
+  }
+  
+  
