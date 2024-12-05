@@ -16,23 +16,33 @@ import BarcodeScannerComponent from "react-qr-barcode-scanner"
 import { fetchProductInfo } from "../utils/api"
 import { Product } from "../types/Product"
 import onScan from 'onscan.js'
+//@ts-ignore
+import {useTranslation} from 'react-i18next'
+import { useDispatch, useSelector } from "react-redux"
+import { setLanguage } from "../../redux/languageSlice"
+import { usePasswordProtectedAction } from "../../hooks/useMasterPasswordAction"
 
 interface HelpVideo {
   id: number
   title: string
   duration: string
+  videoUrl: string
 }
 
 export default function FullScreenScanner() {
+  const currentLanguage = useSelector((state: any) => state.language.language);
+
   const [ean, setEan] = useState<string>('0')
   const [products, setProducts] = useState<Product[]>([])
   const [isScanning, setIsScanning] = useState<boolean>(false)
   const [isExpanded, setIsExpanded] = useState(false)
-  const [language, setLanguage] = useState("English")
+  const [languages, setLanguages] = useState(currentLanguage)
   const scannerRef = useRef<HTMLDivElement>(null)
+  const [currentVideo, setCurrentVideo] = useState<string>("/video/AdobeStock_514688104_Video_HD_Preview.mov");
   let scannedCode = '';
   let lastInputTime = Date.now();
   const Navigate = useNavigate()
+  const { t } = useTranslation();
 
   useEffect(() => {
     if (isScanning && scannerRef.current) {
@@ -109,29 +119,30 @@ export default function FullScreenScanner() {
 
   const addProduct = async (code: string) => {
     const productInfo = await fetchProductInfo(code)
-    const newProduct: Product = {
-      id: products.length + 1,
-      code,
-      name: productInfo?.product_name || `Product ${products.length + 1}`,
-      price: 1.00,
-      kcal: productInfo?.nutriments['energy-kcal'] || 0,
-      quantity: 1, // Initialize with quantity as 1
-    }
-
-    // Check if the product already exists in the list
-    const existingProduct = products.find(product => product.code === code)
-
-    if (existingProduct) {
-      // If product exists, increase the quantity
-      setProducts(products.map(product =>
-        product.code === code
-          ? { ...product, quantity: product.quantity + 1 }
-          : product
-      ))
-    } else {
-      // Otherwise, add the new product to the list
-      setProducts([...products, newProduct])
-    }
+  
+    setProducts(prevProducts => {
+      const existingProductIndex = prevProducts.findIndex(product => product.code === code)
+      
+      if (existingProductIndex !== -1) {
+        // If product exists, increase the quantity
+        return prevProducts.map((product, index) =>
+          index === existingProductIndex
+            ? { ...product, quantity: product.quantity + 1 }
+            : product
+        )
+      } else {
+        // If it's a new product, add it to the list
+        const newProduct: Product = {
+          id: Date.now(),
+          code,
+          name: productInfo?.product_name || `Product ${prevProducts.length + 1}`,
+          price: 1.00,
+          kcal: productInfo?.nutriments['energy-kcal'] || 0,
+          quantity: 1,
+        }
+        return [...prevProducts, newProduct]
+      }
+    })
   }
 
   const handleAddProduct = () => {
@@ -139,7 +150,8 @@ export default function FullScreenScanner() {
   }
 
   const removeProduct = (id: number) => {
-    setProducts(products.filter(product => product.id !== id))
+    openModal(products.filter(product => product.id !== id))
+    // setProducts(products.filter(product => product.id !== id))
   }
 
   const handlePriceChange = (id: number, price: number) => {
@@ -149,7 +161,8 @@ export default function FullScreenScanner() {
   }
 
   const clearItems = () => {
-    setProducts([])
+    // setProducts([])
+    openModal([])
   }
 
   const totalPrice = products.reduce((sum, product) => sum + product.price * product.quantity, 0)
@@ -157,12 +170,28 @@ export default function FullScreenScanner() {
   const itemCount = products.length
 
   const helpVideos: HelpVideo[] = [
-    { id: 1, title: "How to scan items", duration: "2:30" },
-    { id: 2, title: "Using coupons", duration: "3:45" },
-    { id: 3, title: "Payment methods", duration: "4:15" },
-    { id: 4, title: "Troubleshooting", duration: "5:00" },
+    { id: 1, title: t("How to scan items"), duration: "2:30" , videoUrl: "/video/AdobeStock_427154101_Video_HD_Preview (2).mov"},
+    { id: 2, title: t("Using coupons"), duration: "3:45"  , videoUrl: "/video/AdobeStock_514688104_Video_HD_Preview.mov"},
+    { id: 3, title: t("Payment methods"), duration: "4:15" , videoUrl: "/video/AdobeStock_660070776_Video_HD_Preview.mov" },
+    { id: 4, title: t("Troubleshooting"), duration: "5:00" , videoUrl: "/video/AdobeStock_514688104_Video_HD_Preview.mov" },
   ]
 
+  // Language Translation
+  const dispatch = useDispatch();
+  
+  const handleLanguageChange = (lang: string) => {
+    dispatch(setLanguage(lang)); // Update Redux state
+    setLanguages(lang)
+  };
+  const {
+    isOpen,
+    password,
+    error,
+    openModal,
+    closeModal,
+    setPassword,
+    handleSubmit,
+  } = usePasswordProtectedAction('master123') 
   return (
     <div className="h-screen bg-red-50 flex flex-col">
       <header className="bg-red-600 text-white p-4 shadow-lg flex justify-between">
@@ -173,18 +202,18 @@ export default function FullScreenScanner() {
             className="h-12 bg-white p-2 rounded"
           />
         </div>
-        <h1 className="text-3xl font-bold">Self-Checkout Scanner</h1>
+        <h1 className="text-3xl font-bold">{t("Self-Checkout Scanner")}</h1>
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
             <Button variant="ghost" className="flex items-center gap-2 text-white hover:bg-red-700">
               <Globe className="w-4 h-4" />
-              {language}
+              {languages}
               <ChevronDown className="w-4 h-4" />
             </Button>
           </DropdownMenuTrigger>
           <DropdownMenuContent>
-            <DropdownMenuItem onClick={() => setLanguage("English")}>English</DropdownMenuItem>
-            <DropdownMenuItem onClick={() => setLanguage("Arabic")}>Arabic</DropdownMenuItem>
+            <DropdownMenuItem onClick={() => handleLanguageChange('English')}>English</DropdownMenuItem>
+            <DropdownMenuItem onClick={() => handleLanguageChange('عربي')}>عربي</DropdownMenuItem>
           </DropdownMenuContent>
         </DropdownMenu>
       </header>
@@ -202,16 +231,16 @@ export default function FullScreenScanner() {
                 className="flex-grow text-lg"
               />
               <Button onClick={handleScan} className="bg-red-600 hover:bg-red-700 text-white text-lg px-6">
-                <Barcode className="mr-2 h-5 w-5" /> Scan
+                <Barcode className="mr-2 h-5 w-5" /> {t("Scan")}
               </Button>
               <Button onClick={handleAddProduct} className="bg-red-600 hover:bg-red-700 text-white text-lg px-6">
-                Add
+                {t("Add")}
               </Button>
             </div>
 
             <div className="flex-grow flex flex-col overflow-hidden">
               <div className="flex justify-between items-center mb-2">
-                <h2 className="text-xl font-bold">Scanned Items ({itemCount})</h2>
+                <h2 className="text-xl font-bold">{t("Scanned Items")} ({itemCount})</h2>
                 <Button
                   variant="ghost"
                   size="sm"
@@ -226,14 +255,13 @@ export default function FullScreenScanner() {
                 <div className="space-y-2">
                   {products.slice(isExpanded ? 0 : -4).map((product) => (
                     <div key={product.id} className="flex justify-between items-center bg-red-100 p-3 rounded-lg">
-                      <span className="text-lg">{product.name}</span>
+                      <span className="text-lg">{product.name} x{product.quantity}</span>
                       <div className="flex items-center space-x-4">
-                        <Input
-                          type="number"
-                          value={product.price}
-                          onChange={(e) => handlePriceChange(product.id, parseFloat(e.target.value))}
+                        <div
+                          
+                          onChange={(e:any) => handlePriceChange(product.id, parseFloat(e.target.value))}
                           className="w-20 text-right"
-                        />
+                        >KWD {product.price}.00</div>
                         <Button
                           size="icon"
                           variant="ghost"
@@ -251,19 +279,19 @@ export default function FullScreenScanner() {
 
             <div className="mt-4 pt-4 border-t border-gray-200">
               <div className="flex justify-between items-center text-2xl font-bold mb-4">
-                <span>Total:</span>
-                <span>${totalPrice.toFixed(2)}</span>
+                <span>{t("Total")}</span>
+                <span>KWD {totalPrice.toFixed(2)}</span>
               </div>
               <div className="flex justify-between items-center text-lg mb-4">
-                <span>Total Calories:</span>
-                <span>{totalKcal.toFixed(2)} kcal</span>
+                <span>{t("Total Calories:")}</span>
+                <span>{totalKcal.toFixed(2)} {t("kcal")}</span>
               </div>
               <div className="flex space-x-4">
                 <Button onClick={clearItems} variant="outline" className="flex-1 text-red-600 border-red-600 hover:bg-red-100 text-lg">
-                  <Trash2 className="mr-2 h-5 w-5" /> Clear All
+                  <Trash2 className="mr-2 h-5 w-5" /> {t("Clear All")}
                 </Button>
                 <Button className="flex-1 bg-green-600 hover:bg-green-700 text-white text-lg py-6">
-                  <CreditCard className="mr-2 h-6 w-6" /> Pay Now
+                  <CreditCard className="mr-2 h-6 w-6" /> {t("Pay Now")}
                 </Button>
               </div>
             </div>
@@ -272,18 +300,26 @@ export default function FullScreenScanner() {
 
         <section className="w-full md:w-1/2 p-4 bg-red-50">
           <div className="bg-white rounded-lg shadow-lg p-4 h-full flex flex-col">
-            <h2 className="text-2xl font-bold mb-4">Helpful Resources</h2>
+            <h2 className="text-2xl font-bold mb-4">{t("Helpful Resources")}</h2>
             <div className="flex-grow">
-              <div className="aspect-w-16 aspect-h-9 mb-4">
-                <div className="w-full h-full bg-gray-300 rounded-lg flex items-center justify-center">
-                  <PlayCircle className="h-40 w-16 text-gray-600" />
-                </div>
-              </div>
-              <h3 className="text-xl font-semibold mb-2">How-to Videos</h3>
+            <div className="aspect-w-16 aspect-h-9 mb-4">
+  <div className="w-full h-full bg-gray-300 rounded-lg flex items-center justify-center">
+    <video 
+      className="w-full h-full rounded-lg" 
+      src={currentVideo}
+      autoPlay 
+      muted 
+      loop 
+      controls   
+    ></video>
+  </div>
+</div>
+
+              <h3 className="text-xl font-semibold mb-2">{t("How-to Videos")}</h3>
               <ScrollArea className="h-64">
                 <ul className="space-y-2">
                   {helpVideos.map((video) => (
-                    <li key={video.id} className="flex justify-between items-center bg-gray-50 p-3 rounded-lg">
+                    <li key={video.id} className="flex justify-between items-center bg-gray-50 p-3 rounded-lg"  onClick={() => setCurrentVideo(video.videoUrl)}>
                       <span className="text-lg">{video.title}</span>
                       <span className="text-sm text-gray-600">{video.duration}</span>
                     </li>
@@ -293,13 +329,37 @@ export default function FullScreenScanner() {
             </div>
             <div className="mt-4 pt-4 border-t border-gray-200">
               <Button className="w-full bg-blue-600 hover:bg-blue-700 text-white text-lg py-4">
-                Need More Help?
+                {t("Need More Help?")}
               </Button>
             </div>
           </div>
         </section>
       </main>
-
+      
+      {isOpen && (
+        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+          <div className="bg-white p-6 rounded-lg shadow-xl w-96">
+            <h2 className="text-2xl font-bold mb-4">{t("Enter Master Password")}</h2>
+            <p className="mb-4">{t("Please enter the master password to clear all items.")}</p>
+            <Input
+              type="password"
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+              className="w-full mb-4"
+              placeholder={t("Password")}
+            />
+            {error && <p className="text-sm text-red-500 mb-4">{error}</p>}
+            <div className="flex justify-end space-x-4">
+              <Button onClick={closeModal} variant="outline">
+                {t("Cancel")}
+              </Button>
+              <Button onClick={() => handleSubmit(() => setProducts([]))}>
+                {t("Submit")}
+              </Button>
+            </div>
+          </div>
+        </div>
+      )}
       {isScanning && (
         <div ref={scannerRef} className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center">
           <div className="bg-white p-4 rounded-lg">
@@ -313,7 +373,7 @@ export default function FullScreenScanner() {
               }}
             />
             <Button onClick={() => setIsScanning(false)} className="mt-4 w-full">
-              Close Scanner
+              {t("Close Scanner")}
             </Button>
           </div>
         </div>

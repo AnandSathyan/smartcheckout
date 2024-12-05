@@ -11,6 +11,7 @@ export default function BarcodeScanner() {
   const [isScanning, setIsScanning] = useState<boolean>(false);
   const scannerRef = useRef<HTMLDivElement>(null);
 
+
   useEffect(() => {
     if (isScanning && scannerRef.current) {
       scannerRef.current.scrollIntoView({ behavior: 'smooth' });
@@ -81,6 +82,7 @@ export default function BarcodeScanner() {
         </div>
       </div>
       <div className={styles.row}>
+         
         <ProductTable
           products={products}
           onRemoveProduct={handleRemoveProduct}

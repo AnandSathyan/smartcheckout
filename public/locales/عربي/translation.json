@@ -1,0 +1,39 @@
+{
+    "greeting": "Bonjour, bienvenue sur notre site Web!",
+    
+    "language":"عربي",
+    "Easy Self-Checkout":"من السهل الخروج الذاتي",
+    "Complete your purchase quickly and easily":"أكمل عملية الشراء بسرعة وسهولة",
+    "Scan Items":"مسح العناصر",
+    "Finish Checkout":"إنهاء الخروج",
+    "Use the scanner to add your items":"استخدم الماسح الضوئي لإضافة العناصر الخاصة بك",
+    "Pay":"يدفع",
+    "Choose your payment method":"اختر طريقة الدفع الخاصة بك",
+    "Done":"منتهي",
+    "Collect your receipt and items":"جمع الإيصال والعناصر الخاصة بك",
+    "Next Step:":"الخطوة التالية:",
+    "Start":"يبدأ",
+    "© 2024 Pegasus Self-Checkout. All rights reserved.":"© 2024 بيغاسوس الدفع الذاتي. جميع الحقوق محفوظة.",
+
+
+
+    
+    "Self-Checkout Scanner":"الماسح الضوئي للدفع الذاتي",
+    "Scan":"مسح",
+    "Add":"يضيف",
+    "Scanned Items":"العناصر الممسوحة ضوئيًا",
+    "Total":"المجموع:",
+    "Total Calories:":"إجمالي السعرات الحرارية:",
+    "kcal":"سعر حراري",
+    "Clear All":"مسح الكل",
+    "Pay Now":"ادفع الآن",
+    "Helpful Resources":"موارد مفيدة",
+    "How-to Videos":"مقاطع فيديو إرشادية",
+    "How to scan items":"كيفية مسح العناصر",
+    "Using coupons":"باستخدام كوبونات",
+    "Payment methods":"طرق الدفع",
+    "Troubleshooting":"استكشاف الأخطاء وإصلاحها",
+    "Need More Help?":"هل تحتاج إلى المزيد من المساعدة؟",
+    "Close Scanner":"إغلاق الماسح الضوئي"
+  }
+  

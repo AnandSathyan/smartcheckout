@@ -11,36 +11,50 @@ import {
 } from "../../components/ui/Dropdown/DropdownMenu"
 import { Button } from "../../components/ui/Button/Button"
 import { useNavigate } from "react-router-dom"
-
+//@ts-ignore
+import {useTranslation} from 'react-i18next'
+import { useDispatch, useSelector } from 'react-redux';
+import { setLanguage } from "../../redux/languageSlice"
 export default function SelfCheckout() {
+  const currentLanguage = useSelector((state: any) => state.language.language);
+
     const navigate = useNavigate();
-    const [language, setLanguage] = useState("English")
+    const [languages, setLanguages] = useState(currentLanguage)
     const [activeStep, setActiveStep] = useState(0)
+    const { t } = useTranslation();
     const handleClick = (steps:any) =>{
         // console.log("steps:",steps);
-        if(steps.title == "Scan Items"){
+        if(steps.title == "Scan Items" ||steps.title == "مسح العناصر"){
             navigate('Scan')
         }
 
     }
     const steps = [
         {
-            title: "Scan Items",
+            title: t("Scan Items"),
             icon: <ShoppingBasket className="w-8 h-8" />,
-            description: "Use the scanner to add your items",
+            description: t("Use the scanner to add your items"),
         },
         {
-            title: "Pay",
+            title: t("Pay"),
             icon: <CreditCard className="w-8 h-8" />,
-            description: "Choose your payment method",
+            description: t("Choose your payment method"),
         },
         {
-            title: "Done",
+            title: t("Done"),
             icon: <CheckCircle className="w-8 h-8" />,
-            description: "Collect your receipt and items",
+            description: t("Collect your receipt and items"),
         },
     ]
 
+    const dispatch = useDispatch();
+  
+    const handleLanguageChange = (lang: string) => {
+      dispatch(setLanguage(lang)); // Update Redux state
+     setLanguages(lang)
+    };
+
+  
     return (
         <div className="min-h-screen bg-white flex flex-col">
             <div className="container mx-auto px-4 py-6 flex-grow">
@@ -57,13 +71,13 @@ export default function SelfCheckout() {
                         <DropdownMenuTrigger asChild>
                             <Button variant="ghost" className="flex items-center gap-2 text-white hover:bg-red-700">
                                 <Globe className="w-4 h-4" />
-                                {language}
+                                {languages}
                                 <ChevronDown className="w-4 h-4" />
                             </Button>
                         </DropdownMenuTrigger>
                         <DropdownMenuContent>
-                            <DropdownMenuItem onClick={() => setLanguage("English")}>English</DropdownMenuItem>
-                            <DropdownMenuItem onClick={() => setLanguage("Arabic")}>Arabic</DropdownMenuItem>
+                            <DropdownMenuItem onClick={() => handleLanguageChange('English')}>English</DropdownMenuItem>
+                            <DropdownMenuItem onClick={() => handleLanguageChange('عربي')}>عربي</DropdownMenuItem>
                             {/* <DropdownMenuItem onClick={() => setLanguage("Français")}>Français</DropdownMenuItem> */}
                         </DropdownMenuContent>
                     </DropdownMenu>
@@ -73,10 +87,10 @@ export default function SelfCheckout() {
                     <div className="space-y-8">
                         <div className="space-y-4">
                             <h1 className="text-3xl md:text-4xl font-bold text-red-600">
-                                Easy Self-Checkout
+                                {t("Easy Self-Checkout")}
                             </h1>
                             <p className="text-lg text-gray-600">
-                                Complete your purchase quickly and easily
+                                {t("Complete your purchase quickly and easily")}
                             </p>
                         </div>
 
@@ -107,14 +121,14 @@ export default function SelfCheckout() {
                             animate={{ opacity: 1, y: 0 }}
                             transition={{ duration: 0.5, delay: 0.3 }}
                         >
-                            <h2 className="text-2xl font-bold text-red-600 mb-4">Next Step:</h2>
+                            <h2 className="text-2xl font-bold text-red-600 mb-4">{t("Next Step:")}</h2>
                             <p className="text-xl mb-6">{steps[activeStep].description}</p>
                             <Button
                                 size="lg"
                                 className="w-full bg-red-600 hover:bg-red-700 text-white text-xl py-6 px-8 rounded-lg shadow-md transition-colors duration-300"
                                 onClick={() => setActiveStep((prev) => (prev + 1) % steps.length)}
                             >
-                                {activeStep === steps.length - 1 ? "Finish Checkout" : `Start ${steps[activeStep].title}`}
+                                {activeStep === steps.length - 1 ? t("Finish Checkout") : `${t('Start')} ${steps[activeStep].title}`}
                             </Button>
                         </motion.div>
                     </div>
@@ -150,7 +164,7 @@ export default function SelfCheckout() {
 
             <footer className="bg-gray-100 py-4 mt-12">
                 <div className="container mx-auto px-4 text-center text-gray-600">
-                    © 2024 Pegasus Self-Checkout. All rights reserved.
+                    {t("© 2024 Pegasus Self-Checkout. All rights reserved.")}
                 </div>
             </footer>
         </div>

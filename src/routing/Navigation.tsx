@@ -12,18 +12,18 @@ function NavigationContent() {
   const [isLoading, setIsLoading] = useState(true)
   const location = useLocation()
 
-  useEffect(() => {
-    setIsLoading(true)
-    const timer = setTimeout(() => {
-      setIsLoading(false)
-    }, 1000) // Simulating a 2-second load time
+  // useEffect(() => {
+  //   setIsLoading(true)
+  //   const timer = setTimeout(() => {
+  //     setIsLoading(false)
+  //   }, 1000) // Simulating a 2-second load time
 
-    return () => clearTimeout(timer)
-  }, [location])
+  //   return () => clearTimeout(timer)
+  // }, [location])
 
-  if (isLoading) {
-    return <LoadingScreen />
-  }
+  // if (isLoading) {
+  //   return <LoadingScreen />
+  // }
 
   return (
     <Routes>
