@@ -63,8 +63,8 @@ export default function SelfCheckout() {
               alt="Pegasus Logo"
               className="h-10 bg-white p-1 rounded"
             />
-            <h1 className="text-2xl font-bold hidden sm:block">{t("Self-Checkout")}</h1>
           </div>
+            <h1 className="text-2xl font-bold hidden sm:block">{t("Easy Self-Checkout")}</h1>
           <DropdownMenu>
             <DropdownMenuTrigger asChild>
               <Button variant="ghost" className="text-white hover:bg-red-700">

@@ -185,7 +185,7 @@ export default function FullScreenScanner() {
 
   return (
     <div className="h-screen bg-red-50 flex flex-col overflow-hidden">
-      <header className="bg-red-600 text-white p-2 shadow-lg flex justify-between items-center">
+      {/* <header className="bg-red-600 text-white p-2 shadow-lg flex justify-between items-center">
         <div onClick={()=>Navigate('/')} className="flex items-center gap-2 cursor-pointer">
           <img
             src="https://www.pegasustech.net/image/catalog/pegasus-logob.png"
@@ -207,8 +207,33 @@ export default function FullScreenScanner() {
             <DropdownMenuItem onClick={() => handleLanguageChange('عربي')}>عربي</DropdownMenuItem>
           </DropdownMenuContent>
         </DropdownMenu>
+      </header> */}
+ <header className="bg-red-600 text-white p-4 shadow-md">
+        <div className="max-w-7xl mx-auto flex justify-between items-center">
+          <div className="flex items-center gap-4">
+            <img
+              src="https://www.pegasustech.net/image/catalog/pegasus-logob.png"
+              alt="Pegasus Logo"
+              className="h-10 bg-white p-1 rounded"
+              onClick={()=>Navigate('/')}
+            />
+          </div>
+            <h1 className="text-2xl font-bold hidden sm:block">{t("Easy Self-Checkout")}</h1>
+          <DropdownMenu>
+            <DropdownMenuTrigger asChild>
+              <Button variant="ghost" className="text-white hover:bg-red-700">
+                <Globe className="w-4 h-4 mr-2" />
+                {languages}
+                <ChevronDown className="w-4 h-4 ml-2" />
+              </Button>
+            </DropdownMenuTrigger>
+            <DropdownMenuContent>
+              <DropdownMenuItem onClick={() => handleLanguageChange('English')}>English</DropdownMenuItem>
+              <DropdownMenuItem onClick={() => handleLanguageChange('عربي')}>عربي</DropdownMenuItem>
+            </DropdownMenuContent>
+          </DropdownMenu>
+        </div>
       </header>
-
       <main className="flex-grow flex flex-col md:flex-row overflow-hidden">
         <section className="w-full md:w-1/2 p-2 flex flex-col h-full overflow-hidden">
           <div className="bg-white rounded-lg shadow-lg p-2 flex flex-col h-full">
