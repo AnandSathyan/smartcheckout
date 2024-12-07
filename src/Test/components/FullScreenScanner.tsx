@@ -1,7 +1,7 @@
 "use client"
 
 import React, { useState, useEffect, useRef } from "react"
-import { Trash2, CreditCard, X, Barcode, ChevronUp, ChevronDown, PlayCircle, Globe } from 'lucide-react'
+import { Trash2, CreditCard, X, Barcode, ChevronUp, ChevronDown, Globe } from 'lucide-react'
 import { Button } from "../../components/ui/Button/Button"
 import { Input } from "../../components/ui/Input/Input"
 import { ScrollArea } from "@radix-ui/react-scroll-area"
@@ -51,9 +51,8 @@ export default function FullScreenScanner() {
   }, [isScanning])
 
   useEffect(() => {
-    // Initialize onScan.js
     onScan.attachTo(document, {
-      suffixKeyCodes: [13], // Enter key
+      suffixKeyCodes: [13],
       reactToPaste: true,
       onScan: function(sScanned: string, iQuantity: number) {
         console.log('Scanned with onScan.js: ', sScanned, 'Quantity: ', iQuantity);
@@ -64,22 +63,18 @@ export default function FullScreenScanner() {
       }
     });
 
-    // USB scanner detection
     const handleInput = (e: Event) => {
       const inputElement = e.target as HTMLInputElement;
       const currentTime = Date.now();
       
       if (currentTime - lastInputTime > 50) {
-        // If the delay between inputs is more than 50ms, assume it's a new scan
         scannedCode = inputElement.value;
       } else {
-        // Otherwise, append to the existing scanned code
         scannedCode += inputElement.value.slice(-1);
       }
       
       lastInputTime = currentTime;
       
-      // Check if the scanned code is complete (you may need to adjust this logic)
       if (scannedCode.length > 5) {
         console.log('Scanned with USB scanner:', scannedCode);
         handleDetected(scannedCode);
@@ -93,7 +88,6 @@ export default function FullScreenScanner() {
       inputElement.addEventListener('input', handleInput);
     }
 
-    // Cleanup function
     return () => {
       onScan.detachFrom(document);
       if (inputElement) {
@@ -104,7 +98,7 @@ export default function FullScreenScanner() {
 
   const handleEanChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setEan(e.target.value);
-    scannedCode = ''; // Reset scanned code on manual input
+    scannedCode = '';
   }
 
   const handleScan = () => {
@@ -124,14 +118,12 @@ export default function FullScreenScanner() {
       const existingProductIndex = prevProducts.findIndex(product => product.code === code)
       
       if (existingProductIndex !== -1) {
-        // If product exists, increase the quantity
         return prevProducts.map((product, index) =>
           index === existingProductIndex
             ? { ...product, quantity: product.quantity + 1 }
             : product
         )
       } else {
-        // If it's a new product, add it to the list
         const newProduct: Product = {
           id: Date.now(),
           code,
@@ -151,7 +143,6 @@ export default function FullScreenScanner() {
 
   const removeProduct = (id: number) => {
     openModal(products.filter(product => product.id !== id))
-    // setProducts(products.filter(product => product.id !== id))
   }
 
   const handlePriceChange = (id: number, price: number) => {
@@ -161,7 +152,6 @@ export default function FullScreenScanner() {
   }
 
   const clearItems = () => {
-    // setProducts([])
     openModal([])
   }
 
@@ -176,13 +166,13 @@ export default function FullScreenScanner() {
     { id: 4, title: t("Troubleshooting"), duration: "5:00" , videoUrl: "/video/AdobeStock_514688104_Video_HD_Preview.mov" },
   ]
 
-  // Language Translation
   const dispatch = useDispatch();
   
   const handleLanguageChange = (lang: string) => {
-    dispatch(setLanguage(lang)); // Update Redux state
+    dispatch(setLanguage(lang));
     setLanguages(lang)
   };
+
   const {
     isOpen,
     password,
@@ -192,17 +182,18 @@ export default function FullScreenScanner() {
     setPassword,
     handleSubmit,
   } = usePasswordProtectedAction('master123') 
+
   return (
-    <div className="h-screen bg-red-50 flex flex-col">
-      <header className="bg-red-600 text-white p-4 shadow-lg flex justify-between">
+    <div className="h-screen bg-red-50 flex flex-col overflow-hidden">
+      <header className="bg-red-600 text-white p-2 shadow-lg flex justify-between items-center">
         <div onClick={()=>Navigate('/')} className="flex items-center gap-2 cursor-pointer">
           <img
             src="https://www.pegasustech.net/image/catalog/pegasus-logob.png"
             alt="Pegasus Logo"
-            className="h-12 bg-white p-2 rounded"
+            className="h-8 bg-white p-1 rounded"
           />
         </div>
-        <h1 className="text-3xl font-bold">{t("Self-Checkout Scanner")}</h1>
+        <h1 className="text-xl font-bold">{t("Self-Checkout Scanner")}</h1>
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
             <Button variant="ghost" className="flex items-center gap-2 text-white hover:bg-red-700">
@@ -218,57 +209,53 @@ export default function FullScreenScanner() {
         </DropdownMenu>
       </header>
 
-      <main className="flex-grow flex flex-col md:flex-row">
-        <section className="w-full md:w-1/2 p-4 flex flex-col h-full">
-          <div className="bg-white rounded-lg shadow-lg p-4 flex flex-col h-full">
-            <div className="flex space-x-2 mb-4">
+      <main className="flex-grow flex flex-col md:flex-row overflow-hidden">
+        <section className="w-full md:w-1/2 p-2 flex flex-col h-full overflow-hidden">
+          <div className="bg-white rounded-lg shadow-lg p-2 flex flex-col h-full">
+            <div className="flex space-x-2 mb-2">
               <Input
                 id="ean_input"
                 type="text"
                 placeholder="Scan or enter item"
                 value={ean}
                 onChange={handleEanChange}
-                className="flex-grow text-lg"
+                className="flex-grow text-base"
               />
-              <Button onClick={handleScan} className="bg-red-600 hover:bg-red-700 text-white text-lg px-6">
-                <Barcode className="mr-2 h-5 w-5" /> {t("Scan")}
+              <Button onClick={handleScan} className="bg-red-600 hover:bg-red-700 text-white text-base px-4">
+                <Barcode className="mr-2 h-4 w-4" /> {t("Scan")}
               </Button>
-              <Button onClick={handleAddProduct} className="bg-red-600 hover:bg-red-700 text-white text-lg px-6">
+              <Button onClick={handleAddProduct} className="bg-red-600 hover:bg-red-700 text-white text-base px-4">
                 {t("Add")}
               </Button>
             </div>
 
             <div className="flex-grow flex flex-col overflow-hidden">
               <div className="flex justify-between items-center mb-2">
-                <h2 className="text-xl font-bold">{t("Scanned Items")} ({itemCount})</h2>
+                <h2 className="text-lg font-bold">{t("Scanned Items")} ({itemCount})</h2>
                 <Button
                   variant="ghost"
                   size="sm"
                   onClick={() => setIsExpanded(!isExpanded)}
                   className="text-red-600"
                 >
-                  {isExpanded ? <ChevronUp className="h-5 w-5" /> : <ChevronDown className="h-5 w-5" />}
+                  {isExpanded ? <ChevronUp className="h-4 w-4" /> : <ChevronDown className="h-4 w-4" />}
                 </Button>
               </div>
 
-              <ScrollArea className="flex-grow">
+              <ScrollArea className="flex-grow h-[calc(100vh-300px)]">
                 <div className="space-y-2">
                   {products.slice(isExpanded ? 0 : -4).map((product) => (
-                    <div key={product.id} className="flex justify-between items-center bg-red-100 p-3 rounded-lg">
-                      <span className="text-lg">{product.name} x{product.quantity}</span>
-                      <div className="flex items-center space-x-4">
-                        <div
-                          
-                          onChange={(e:any) => handlePriceChange(product.id, parseFloat(e.target.value))}
-                          className="w-20 text-right"
-                        >KWD {product.price}.00</div>
+                    <div key={product.id} className="flex justify-between items-center bg-red-100 p-2 rounded-lg">
+                      <span className="text-base">{product.name} x{product.quantity}</span>
+                      <div className="flex items-center space-x-2">
+                        <div className="w-16 text-right text-sm">KWD {product.price}.00</div>
                         <Button
                           size="icon"
                           variant="ghost"
                           onClick={() => removeProduct(product.id)}
-                          className="h-8 w-8 text-red-600 hover:text-red-800 hover:bg-red-200"
+                          className="h-6 w-6 text-red-600 hover:text-red-800 hover:bg-red-200"
                         >
-                          <X className="h-5 w-5" />
+                          <X className="h-4 w-4" />
                         </Button>
                       </div>
                     </div>
@@ -277,58 +264,58 @@ export default function FullScreenScanner() {
               </ScrollArea>
             </div>
 
-            <div className="mt-4 pt-4 border-t border-gray-200">
-              <div className="flex justify-between items-center text-2xl font-bold mb-4">
+            <div className="mt-2 pt-2 border-t border-gray-200">
+              <div className="flex justify-between items-center text-lg font-bold mb-2">
                 <span>{t("Total")}</span>
                 <span>KWD {totalPrice.toFixed(2)}</span>
               </div>
-              <div className="flex justify-between items-center text-lg mb-4">
+              <div className="flex justify-between items-center text-base mb-2">
                 <span>{t("Total Calories:")}</span>
                 <span>{totalKcal.toFixed(2)} {t("kcal")}</span>
               </div>
-              <div className="flex space-x-4">
-                <Button onClick={clearItems} variant="outline" className="flex-1 text-red-600 border-red-600 hover:bg-red-100 text-lg">
-                  <Trash2 className="mr-2 h-5 w-5" /> {t("Clear All")}
+              <div className="flex space-x-2">
+                <Button onClick={clearItems} variant="outline" className="flex-1 text-red-600 border-red-600 hover:bg-red-100 text-base py-2">
+                  <Trash2 className="mr-2 h-4 w-4" /> {t("Clear All")}
                 </Button>
-                <Button className="flex-1 bg-green-600 hover:bg-green-700 text-white text-lg py-6">
-                  <CreditCard className="mr-2 h-6 w-6" /> {t("Pay Now")}
+                <Button className="flex-1 bg-green-600 hover:bg-green-700 text-white text-base py-2">
+                  <CreditCard className="mr-2 h-4 w-4" /> {t("Pay Now")}
                 </Button>
               </div>
             </div>
           </div>
         </section>
 
-        <section className="w-full md:w-1/2 p-4 bg-red-50">
-          <div className="bg-white rounded-lg shadow-lg p-4 h-full flex flex-col">
-            <h2 className="text-2xl font-bold mb-4">{t("Helpful Resources")}</h2>
-            <div className="flex-grow">
-            <div className="aspect-w-16 aspect-h-9 mb-4">
-  <div className="w-full h-full bg-gray-300 rounded-lg flex items-center justify-center">
-    <video 
-      className="w-full h-full rounded-lg" 
-      src={currentVideo}
-      autoPlay 
-      muted 
-      loop 
-      controls   
-    ></video>
-  </div>
-</div>
+        <section className="w-full md:w-1/2 p-2 bg-red-50 overflow-hidden">
+          <div className="bg-white rounded-lg shadow-lg p-2 h-full flex flex-col">
+            <h2 className="text-lg font-bold mb-2">{t("Helpful Resources")}</h2>
+            <div className="flex-grow overflow-hidden">
+              <div className="aspect-w-16 aspect-h-9 mb-2">
+                <div className="w-full h-[30vh] bg-gray-300 rounded-lg flex items-center justify-center">
+                  <video 
+                    className="w-full h-full rounded-lg object-cover" 
+                    src={currentVideo}
+                    autoPlay 
+                    muted 
+                    loop 
+                    controls   
+                  ></video>
+                </div>
+              </div>
 
-              <h3 className="text-xl font-semibold mb-2">{t("How-to Videos")}</h3>
-              <ScrollArea className="h-64">
+              <h3 className="text-base font-semibold mb-2">{t("How-to Videos")}</h3>
+              <ScrollArea className="h-[calc(100vh-400px)]">
                 <ul className="space-y-2">
                   {helpVideos.map((video) => (
-                    <li key={video.id} className="flex justify-between items-center bg-gray-50 p-3 rounded-lg"  onClick={() => setCurrentVideo(video.videoUrl)}>
-                      <span className="text-lg">{video.title}</span>
-                      <span className="text-sm text-gray-600">{video.duration}</span>
+                    <li key={video.id} className="flex justify-between items-center bg-gray-50 p-2 rounded-lg cursor-pointer" onClick={() => setCurrentVideo(video.videoUrl)}>
+                      <span className="text-sm">{video.title}</span>
+                      <span className="text-xs text-gray-600">{video.duration}</span>
                     </li>
                   ))}
                 </ul>
               </ScrollArea>
             </div>
-            <div className="mt-4 pt-4 border-t border-gray-200">
-              <Button className="w-full bg-blue-600 hover:bg-blue-700 text-white text-lg py-4">
+            <div className="mt-2 pt-2 border-t border-gray-200">
+              <Button className="w-full bg-blue-600 hover:bg-blue-700 text-white text-base py-2">
                 {t("Need More Help?")}
               </Button>
             </div>
@@ -338,22 +325,22 @@ export default function FullScreenScanner() {
       
       {isOpen && (
         <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
-          <div className="bg-white p-6 rounded-lg shadow-xl w-96">
-            <h2 className="text-2xl font-bold mb-4">{t("Enter Master Password")}</h2>
-            <p className="mb-4">{t("Please enter the master password to clear all items.")}</p>
+          <div className="bg-white p-4 rounded-lg shadow-xl w-80">
+            <h2 className="text-xl font-bold mb-2">{t("Enter Master Password")}</h2>
+            <p className="mb-2 text-sm">{t("Please enter the master password to clear all items.")}</p>
             <Input
               type="password"
               value={password}
               onChange={(e) => setPassword(e.target.value)}
-              className="w-full mb-4"
+              className="w-full mb-2"
               placeholder={t("Password")}
             />
-            {error && <p className="text-sm text-red-500 mb-4">{error}</p>}
-            <div className="flex justify-end space-x-4">
-              <Button onClick={closeModal} variant="outline">
+            {error && <p className="text-xs text-red-500 mb-2">{error}</p>}
+            <div className="flex justify-end space-x-2">
+              <Button onClick={closeModal} variant="outline" className="text-sm">
                 {t("Cancel")}
               </Button>
-              <Button onClick={() => handleSubmit(() => setProducts([]))}>
+              <Button onClick={() => handleSubmit(() => setProducts([]))} className="text-sm">
                 {t("Submit")}
               </Button>
             </div>
@@ -364,20 +351,23 @@ export default function FullScreenScanner() {
         <div ref={scannerRef} className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center">
           <div className="bg-white p-4 rounded-lg">
             <BarcodeScannerComponent
-              width={500}
-              height={500}
+              width={300}
+              height={300}
               onUpdate={(err, result) => {
                 if (result) {
                   handleDetected(result.getText());
                 }
               }}
             />
-            <Button onClick={() => setIsScanning(false)} className="mt-4 w-full">
+            <Button onClick={() => setIsScanning(false)} className="mt-2 w-full text-sm">
               {t("Close Scanner")}
             </Button>
           </div>
         </div>
       )}
+      <footer className="bg-gray-100 py-4 text-center text-gray-600 text-sm">
+        {t("© 2024 Pegasus Self-Checkout. All rights reserved.")}
+      </footer>
     </div>
   )
 }
