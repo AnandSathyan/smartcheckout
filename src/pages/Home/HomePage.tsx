@@ -49,8 +49,12 @@ export default function SelfCheckout() {
   ]
 
   const handleLanguageChange = (lang: string) => {
-    dispatch(setLanguage(lang))
     setLanguages(lang)
+    if(lang == 'عربي'){
+      lang = "Arabic"
+    }
+    dispatch(setLanguage(lang))
+
   }
 
   return (
@@ -92,7 +96,7 @@ export default function SelfCheckout() {
             </p>
           </div>
 
-          <div className="grid grid-cols-3 gap-4">
+          <div className="grid md:grid-cols-3 gap-4">
             {steps.map((step, index) => (
               <motion.div
                 key={step.title}
