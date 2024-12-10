@@ -28,6 +28,10 @@ export default function SelfCheckout() {
     if (step.title === t("Scan Items")) {
       navigate('Scan')
     }
+    else{
+      console.log("else magellan")
+      navigate('Magellan')
+    }
   }
 
   const steps = [

@@ -8,6 +8,7 @@ import LoadingScreen from '../components/LoadingScreen/LoadingScreen'
 import FullScreenScanners from '../Test/components/FullScreenScanner'
 import FullScreenScannerDummy from '../Test/components/FullScreenScanner'
 import { UserList } from '../api/ApiTest'
+import MagellanScaleScanner from '../Test/components/Magellan'
 
 function NavigationContent() {
   const [isLoading, setIsLoading] = useState(true)
@@ -30,6 +31,8 @@ function NavigationContent() {
     <Routes >
       <Route path="/" element={<SelfCheckout />} />
       <Route path="/userList" element={<UserList />} />
+      <Route path="/Magellan" element={<MagellanScaleScanner />} />
+
 
  
   <Route path="/Scan" element={<FullScreenScanner/> } />
