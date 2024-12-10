@@ -5,7 +5,7 @@ const BarcodeScanner = () => {
 
   useEffect(() => {
     // Create a WebSocket connection to the backend
-    const ws = new WebSocket('ws://localhost:4000'); // WebSocket URL from the Node.js server
+    const ws = new WebSocket('ws://backend-demo-nine-gamma.vercel.app/:4000'); // WebSocket URL from the Node.js server
 
     // Handle incoming messages (barcode data from the scanner)
     ws.onmessage = (event) => {
