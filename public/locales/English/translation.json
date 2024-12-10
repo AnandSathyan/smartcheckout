@@ -33,6 +33,15 @@
     "Payment methods":"Payment methods",
     "Troubleshooting":"Troubleshooting",
     "Need More Help?":"Need More Help?",
-    "Close Scanner":"Close Scanner"
+    "Close Scanner":"Close Scanner",
+
+
+    "Enter Master Password":"Enter Master Password",
+    "Please enter the master password to clear all items.":"Please enter the master password to clear all items.",
+    "Password":"Password",
+    "Clear":"Clear",
+    "Cancel":"Cancel",
+    "Submit":"Submit",
+    "Incorrect password":"Incorrect password"
   }
   

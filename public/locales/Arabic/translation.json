@@ -34,6 +34,16 @@
     "Payment methods":"طرق الدفع",
     "Troubleshooting":"استكشاف الأخطاء وإصلاحها",
     "Need More Help?":"هل تحتاج إلى المزيد من المساعدة؟",
-    "Close Scanner":"إغلاق الماسح الضوئي"
+    "Close Scanner":"إغلاق الماسح الضوئي",
+
+
+
+    "Enter Master Password":"أدخل كلمة المرور الرئيسية",
+    "Please enter the master password to clear all items.":"الرجاء إدخال كلمة المرور الرئيسية لمسح كافة العناصر.",
+    "Password":"كلمة المرور",
+    "Clear":"واضح",
+    "Cancel":"يلغي",
+    "Submit":"يُقدِّم",
+    "Incorrect password":"كلمة مرور غير صحيحة"
   }
   

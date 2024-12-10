@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useRef, useState } from 'react'
 import { Button } from "../../components/ui/Button/Button"
 import { Input } from "../../components/ui/Input/Input"
 import { X } from 'lucide-react'
@@ -16,14 +16,23 @@ export function PasswordProtectedModal({ isOpen, onClose, onConfirm, action }: P
   const [password, setPassword] = useState('')
   const [error, setError] = useState('')
   const { t } = useTranslation()
+  const audioRef = useRef(null); //
 
   const handleSubmit = () => {
+    console.log("handlesubmit running")
+
     // Replace 'master123' with your actual master password or implement a more secure verification method
     if (password === 'master123') {
       onConfirm()
       onClose()
     } else {
-      setError(t('Incorrect password'))
+      console.log("outside if running")
+
+      if (audioRef.current) {
+        console.log("if running")
+        //@ts-ignore
+        audioRef.current.play(); // Play the audio
+      }
     }
   }
 
@@ -50,6 +59,7 @@ export function PasswordProtectedModal({ isOpen, onClose, onConfirm, action }: P
         <div className="flex justify-end space-x-2">
           <Button variant="outline" onClick={onClose}>{t('Cancel')}</Button>
           <Button onClick={handleSubmit}>{t('Confirm')}</Button>
+          <audio ref={audioRef} src="/Audio/beep-warning-6387.mp3" preload="auto"></audio>
         </div>
       </div>
     </div>
