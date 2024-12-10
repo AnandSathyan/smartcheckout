@@ -1,36 +1,28 @@
 import React, { useState, useEffect } from 'react';
 
 const BarcodeScanner = () => {
-  const [scannedData, setScannedData] = useState(''); // To store barcode data
-
-  // Function to handle barcode scanner input (simulates keyboard input)
-  const handleKeyDown = (event:any) => {
-    // We only care about printable characters (barcode scanner typically sends these)
-    if (event.key.length === 1) {
-      // Add the scanned character to the scannedData state
-      setScannedData((prev) => prev + event.key);
-    }
-
-    // When Enter is pressed, we consider the barcode as "scanned" and process it
-    if (event.key === 'Enter' && scannedData.length > 0) {
-      console.log('Scanned Barcode:', scannedData);
-      // Here you can send the barcode to your backend or perform other actions
-      alert(`Barcode scanned: ${scannedData}`);
-      
-      // Reset after processing
-      setScannedData('');
-    }
-  };
+  const [scannedData, setScannedData] = useState('');
 
   useEffect(() => {
-    // Attach keydown event listener to capture barcode scanner input
-    document.addEventListener('keydown', handleKeyDown);
+    // Create a WebSocket connection to the backend
+    const ws = new WebSocket('ws://localhost:4000'); // WebSocket URL from the Node.js server
 
-    // Clean up event listener when component unmounts
-    return () => {
-      document.removeEventListener('keydown', handleKeyDown);
+    // Handle incoming messages (barcode data from the scanner)
+    ws.onmessage = (event) => {
+      const barcode = event.data;
+      console.log('Received barcode:', barcode);
+      setScannedData(barcode); // Update state with scanned barcode
     };
-  }, [scannedData]);
+
+    ws.onerror = (error) => {
+      console.error('WebSocket Error:', error);
+    };
+
+    // Clean up WebSocket connection when the component unmounts
+    return () => {
+      ws.close();
+    };
+  }, []);
 
   return (
     <div style={{ padding: '20px' }}>
@@ -46,10 +38,6 @@ const BarcodeScanner = () => {
         }}
       >
         <strong>Scanned Barcode:</strong> {scannedData || 'Waiting for scan...'}
-      </div>
-
-      <div>
-        <p>Focus the window and scan a barcode.</p>
       </div>
     </div>
   );
