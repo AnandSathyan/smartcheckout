@@ -35,12 +35,14 @@ const MagellanScaleScanner = () => {
 
   // Listen for barcode scanner input via keyboard
   const handleKeyDown = (event:any) => {
-    // Capture barcode data from the scanner (assumed to behave like a keyboard input)
+    // Barcode scanners generally send one character per keypress.
+    // We are only interested in alphanumeric input and possibly Enter key to indicate the end of a scan
     if (event.key.length === 1) {
-      setScannedData((prev) => prev + event.key); // Append the character to scanned data
+      // Add character to scanned data
+      setScannedData((prev) => prev + event.key);
     }
 
-    // When "Enter" is pressed, process the barcode
+    // When Enter is pressed, process the barcode
     if (event.key === 'Enter' && scannedData.length > 0) {
       console.log('Scanned Barcode:', scannedData);
       // Display scanned barcode in UI
