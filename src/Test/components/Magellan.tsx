@@ -5,7 +5,7 @@ const BarcodeScanner = () => {
 
   useEffect(() => {
     // WebSocket URL should point to your Vercel API route
-    const ws = new WebSocket('ws://backend-demo-git-main-anands-projects-d712ebf9.vercel.app/api/websocket'); // WebSocket URL pointing to the API route
+    const ws = new WebSocket('ws://https://backend-demo-nine-gamma.vercel.app//api/websocket'); // WebSocket URL pointing to the API route
 
     ws.onopen = () => {
       console.log('Connected to WebSocket');
