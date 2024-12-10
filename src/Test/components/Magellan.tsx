@@ -4,14 +4,13 @@ const BarcodeScanner = () => {
   const [scannedData, setScannedData] = useState('');
 
   useEffect(() => {
-    // WebSocket URL should use your actual deployed Vercel URL (no :4000 port)
-    const ws = new WebSocket('ws://backend-demo-git-main-anands-projects-d712ebf9.vercel.app/'); // WebSocket URL from the Node.js server hosted on Vercel
+    // WebSocket URL should point to your Vercel API route
+    const ws = new WebSocket('ws://backend-demo-git-main-anands-projects-d712ebf9.vercel.app/api/websocket'); // WebSocket URL pointing to the API route
 
     ws.onopen = () => {
       console.log('Connected to WebSocket');
     };
 
-    // Handle incoming messages (barcode data from the scanner)
     ws.onmessage = (event) => {
       const barcode = event.data;
       console.log('Received barcode:', barcode);
@@ -22,7 +21,6 @@ const BarcodeScanner = () => {
       console.error('WebSocket Error:', error);
     };
 
-    // Clean up WebSocket connection when the component unmounts
     return () => {
       ws.close();
     };
