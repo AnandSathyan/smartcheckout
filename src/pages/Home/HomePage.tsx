@@ -15,7 +15,7 @@ import { useNavigate } from "react-router-dom"
 import { useTranslation } from 'react-i18next'
 import { useDispatch, useSelector } from 'react-redux'
 import { setLanguage } from "../../redux/languageSlice"
-import '../utils/i18n'
+// import '../utils/i18n'
 
 export default function SelfCheckout() {
   const { t, i18n } = useTranslation()
