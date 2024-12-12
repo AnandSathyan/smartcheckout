@@ -20,6 +20,10 @@ i18n
     react: {
       useSuspense: false, // Avoid Suspense issues in React 18+
     },
+    detection: {
+      order: ['localStorage', 'navigator'],
+      caches: ['localStorage'],
+    },
   });
   store.subscribe(() => {
     const language = store.getState().language.language;
