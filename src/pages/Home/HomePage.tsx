@@ -16,7 +16,7 @@ import { useTranslation } from 'react-i18next'
 import { useDispatch, useSelector } from 'react-redux'
 import { setLanguage } from "../../redux/languageSlice"
 
-export default function SelfCheckout() {
+export default function HomePage() {
   const { t, i18n } = useTranslation()
   const currentLanguage = useSelector((state: any) => state.language.language)
   const navigate = useNavigate()
@@ -25,15 +25,15 @@ export default function SelfCheckout() {
   const [activeBox, setActiveBox] = useState("")
   const dispatch = useDispatch()
 
-  useEffect(() => {
-    const initializeLanguage = async () => {
-      await i18n.changeLanguage(currentLanguage.toLowerCase());
-      setLanguages(currentLanguage);
-      setActiveBox(t("Start Scanning"));
-    };
+  // useEffect(() => {
+  //   // const initializeLanguage = async () => {
+  //     // await i18n.changeLanguage(currentLanguage.toLowerCase());
+  //     setLanguages(currentLanguage);
+  //     setActiveBox(t("Start Scanning"));
+  //   // };
 
-    initializeLanguage();
-  }, [currentLanguage, i18n, t]);
+  //   // initializeLanguage();
+  // }, [currentLanguage, i18n, t]);
 
   useEffect(() => {
     setActiveBox(t("Start Scanning"))
@@ -71,11 +71,11 @@ export default function SelfCheckout() {
     },
   ]
 
-  const handleLanguageChange = async (lang: string) => {
-    let normalizedLang = lang === 'عربي' ? 'ar' : lang.toLowerCase();
+  const handleLanguageChange =  (lang: string) => {
+    // let normalizedLang = lang === 'عربي' ? 'ar' : lang.toLowerCase();
     setLanguages(lang)
     dispatch(setLanguage(lang))
-    await i18n.changeLanguage(normalizedLang)
+    // await i18n.changeLanguage(normalizedLang)
   }
 
   return (
@@ -100,7 +100,7 @@ export default function SelfCheckout() {
             </DropdownMenuTrigger>
             <DropdownMenuContent>
               <DropdownMenuItem onClick={() => handleLanguageChange('English')}>English</DropdownMenuItem>
-              <DropdownMenuItem onClick={() => handleLanguageChange('عربي')}>عربي</DropdownMenuItem>
+              <DropdownMenuItem onClick={() => handleLanguageChange('Arabic')}>عربي</DropdownMenuItem>
             </DropdownMenuContent>
           </DropdownMenu>
         </div>
