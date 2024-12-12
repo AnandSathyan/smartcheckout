@@ -1,6 +1,6 @@
 "use client"
 
-import { useState } from "react"
+import { useEffect, useState } from "react"
 import { motion } from "framer-motion"
 import { Globe, ChevronDown, ShoppingBasket, Search, User, ArrowRight } from 'lucide-react'
 import {
@@ -17,18 +17,29 @@ import { useDispatch, useSelector } from 'react-redux'
 import { setLanguage } from "../../redux/languageSlice"
 
 export default function SelfCheckout() {
+  const { t, i18n } = useTranslation()
   const currentLanguage = useSelector((state: any) => state.language.language)
   const navigate = useNavigate()
   const [languages, setLanguages] = useState(currentLanguage)
   const [activeStep, setActiveStep] = useState(0)
-  const { t } = useTranslation()
+  const [activeBox, setActiveBox] = useState("")
   const dispatch = useDispatch()
+  useEffect(() => {
+    // Update activeBox text when language changes
+    setActiveBox(t("Start Scanning"))
+  }, [languages, t])
 
   const handleClick = (step: any) => {
+    setActiveBox(step.title)
     if (step.title === t("Scan Items")) {
-      navigate('Scan')
+      setActiveStep(0)
+      setTimeout(() => {
+        navigate('Scan')
+      }, 500)
+    } else if (step.title === t("Check Price")) {
+      setActiveStep(1)
     } else {
-      console.log("else magellan")
+      setActiveStep(2)
     }
   }
 
@@ -52,10 +63,11 @@ export default function SelfCheckout() {
 
   const handleLanguageChange = (lang: string) => {
     setLanguages(lang)
-    if(lang == 'عربي'){
+    if (lang === 'عربي') {
       lang = "Arabic"
     }
     dispatch(setLanguage(lang))
+    i18n.changeLanguage(lang.toLowerCase())
   }
 
   return (
@@ -137,7 +149,7 @@ export default function SelfCheckout() {
               className="w-full bg-[#002868] hover:bg-[#003c8c] text-white text-xl py-8 rounded-lg shadow-lg transition-colors duration-300"
               onClick={() => handleClick(steps[activeStep])}
             >
-              {t("Start Scanning")} <ArrowRight className="ml-2 h-6 w-6" />
+              {activeBox} <ArrowRight className="ml-2 h-6 w-6" />
             </Button>
           </motion.div>
         </div>
