@@ -1,7 +1,7 @@
 export async function fetchProductInfo(eancode: string) {
     // alert(eancode)
     try {
-      const response = await fetch(`https://world.openfoodfacts.org/api/v0/product/${eancode}.json`);
+      const response = await fetch(`http://217.165.16.202:81/SelfCheckOutAPI/ItemMaster/${eancode}.json`);
       const data = await response.json();
       if (data.status === 1) {
         return {

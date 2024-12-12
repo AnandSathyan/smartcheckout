@@ -35,6 +35,7 @@
     "Troubleshooting":"استكشاف الأخطاء وإصلاحها",
     "Need More Help?":"هل تحتاج إلى المزيد من المساعدة؟",
     "Close Scanner":"إغلاق الماسح الضوئي",
+    "Product":"منتج",
 
 
 
@@ -44,6 +45,18 @@
     "Clear":"واضح",
     "Cancel":"يلغي",
     "Submit":"يُقدِّم",
-    "Incorrect password":"كلمة مرور غير صحيحة"
+    "Incorrect password":"كلمة مرور غير صحيحة",
+
+
+    "Today's Special Offer":"العرض الخاص اليوم",
+    "15% off orders over $200":"خصم 15% على الطلبات التي تزيد عن 200 دينار كويتي",
+    "*Limited time offer. See store for details.":"*عرض لفترة محدودة. انظر المتجر للحصول على التفاصيل.",
+    "Check Price":"التحقق من السعر",
+    "Verify item prices":"التحقق من أسعار العناصر",
+    "User Info":"معلومات المستخدم",
+    "Manage your account":"إدارة حسابك",
+    "Start Scanning":"ابدأ المسح",
+    "Hey there!":"مرحبًا يا من هناك!",
+    "Self-checkout is now easy!":"أصبح الخروج الذاتي سهلاً الآن!"
   }
   

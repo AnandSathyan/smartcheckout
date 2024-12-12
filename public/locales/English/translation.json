@@ -42,6 +42,15 @@
     "Clear":"Clear",
     "Cancel":"Cancel",
     "Submit":"Submit",
-    "Incorrect password":"Incorrect password"
+    "Incorrect password":"Incorrect password",
+
+
+    "Today's Special Offer":"Today's Special Offer",
+    "15% off orders over $200":"15% off orders over KWD 200",
+    "*Limited time offer. See store for details.":"*Limited time offer. See store for details.",
+    "Check Price":"Check Price",
+    "Verify item prices":"Verify item prices",
+    "User Info":"User Info",
+    "Manage your account":"Manage your account"
   }
   

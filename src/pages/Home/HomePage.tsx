@@ -2,7 +2,7 @@
 
 import { useState } from "react"
 import { motion } from "framer-motion"
-import { Globe, ChevronDown, ShoppingBasket, CreditCard, CheckCircle } from 'lucide-react'
+import { Globe, ChevronDown, ShoppingBasket, Search, User, ArrowRight } from 'lucide-react'
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -27,28 +27,26 @@ export default function SelfCheckout() {
   const handleClick = (step: any) => {
     if (step.title === t("Scan Items")) {
       navigate('Scan')
-    }
-    else{
+    } else {
       console.log("else magellan")
-      navigate('Magellan')
     }
   }
 
   const steps = [
     {
       title: t("Scan Items"),
-      icon: <ShoppingBasket className="w-6 h-6" />,
+      icon: <ShoppingBasket className="w-8 h-8" />,
       description: t("Use the scanner to add your items"),
     },
     {
-      title: t("Pay"),
-      icon: <CreditCard className="w-6 h-6" />,
-      description: t("Choose your payment method"),
+      title: t("Check Price"),
+      icon: <Search className="w-8 h-8" />,
+      description: t("Verify item prices"),
     },
     {
-      title: t("Done"),
-      icon: <CheckCircle className="w-6 h-6" />,
-      description: t("Collect your receipt and items"),
+      title: t("User Info"),
+      icon: <User className="w-8 h-8" />,
+      description: t("Manage your account"),
     },
   ]
 
@@ -58,24 +56,23 @@ export default function SelfCheckout() {
       lang = "Arabic"
     }
     dispatch(setLanguage(lang))
-
   }
 
   return (
-    <div className="h-screen bg-gradient-to-b from-red-50 to-white flex flex-col overflow-hidden">
-      <header className="bg-red-600 text-white p-4 shadow-md">
-        <div className="max-w-7xl mx-auto flex justify-between items-center">
+    <div className="h-screen flex flex-col">
+      <header className="bg-[#002868] text-white py-4">
+        <div className="max-w-7xl mx-auto px-4 flex justify-between items-center">
           <div className="flex items-center gap-4">
             <img
               src="https://www.pegasustech.net/image/catalog/pegasus-logob.png"
               alt="Pegasus Logo"
-              className="h-10 bg-white p-1 rounded"
+              className="h-12 bg-white p-2 rounded"
             />
           </div>
-            <h1 className="text-2xl font-bold hidden sm:block">{t("Easy Self-Checkout")}</h1>
+          <h1 className="text-3xl font-bold hidden sm:block">{t("Easy Self-Checkout")}</h1>
           <DropdownMenu>
             <DropdownMenuTrigger asChild>
-              <Button variant="ghost" className="text-white hover:bg-red-700">
+              <Button variant="outline" className="text-white border-white hover:bg-[#003c8c]">
                 <Globe className="w-4 h-4 mr-2" />
                 {languages}
                 <ChevronDown className="w-4 h-4 ml-2" />
@@ -89,86 +86,81 @@ export default function SelfCheckout() {
         </div>
       </header>
 
-      <main className="flex-grow flex flex-col md:flex-row p-4 gap-4 overflow-hidden">
-        <div className="md:w-1/2 space-y-4 overflow-y-auto pr-4">
-          <div>
-            <h2 className="text-3xl font-bold text-red-600 mb-2">
-              {t("Easy Self-Checkout")}
+      <main className="flex-grow flex flex-col md:flex-row">
+        <div className="w-1/2 p-4 bg-white">
+          <div className="mb-8">
+            <h2 className="text-4xl font-bold text-[#002868] mb-4">
+              {t("Hey there!")}
             </h2>
-            <p className="text-lg text-gray-600">
-              {t("Complete your purchase quickly and easily")}
+            <p className="text-2xl text-gray-600">
+              {t("Self-checkout is now easy!")}
             </p>
           </div>
 
-          <div className="grid md:grid-cols-3 gap-4">
+          <div className="space-y-3">
             {steps.map((step, index) => (
               <motion.div
                 key={step.title}
-                className={`cursor-pointer bg-white rounded-lg shadow-md overflow-hidden border border-gray-200 ${
+                className={`cursor-pointer bg-white rounded-lg overflow-hidden ${
                   activeStep === index 
-                    ? " relative after:absolute after:inset-0 after:border-2 after:border-red-500 after:rounded-lg" 
-                    : ""
+                    ? "ring-2 ring-[#002868]" 
+                    : "border border-gray-200"
                 }`}
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
+                initial={{ opacity: 0, x: -20 }}
+                animate={{ opacity: 1, x: 0 }}
                 transition={{ duration: 0.3, delay: index * 0.1 }}
                 onClick={() => handleClick(step)}
               >
-                <div className="p-4 flex flex-col items-center text-center">
-                  <div className={`w-12 h-12 rounded-full flex items-center justify-center mb-2 ${
-                    activeStep === index ? "bg-red-500 text-white" : "bg-red-100 text-red-500"
+                <div className="p-6 flex items-center">
+                  <div className={`w-16 h-16 rounded-full flex items-center justify-center mr-6 ${
+                    activeStep === index ? "bg-[#002868] text-white" : "bg-[#FFD700] text-[#002868]"
                   }`}>
                     {step.icon}
                   </div>
-                  <h3 className="font-semibold text-lg mb-1">{step.title}</h3>
-                  <p className="text-sm text-gray-600">{step.description}</p>
+                  <div>
+                    <h3 className="text-xl font-semibold text-[#002868] mb-1">{step.title}</h3>
+                    <p className="text-gray-600">{step.description}</p>
+                  </div>
                 </div>
               </motion.div>
             ))}
           </div>
 
           <motion.div
-            className="bg-white p-6 rounded-lg shadow-lg border border-red-200"
+            className="mt-4"
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.3, delay: 0.3 }}
           >
-            <h2 className="text-2xl font-bold text-red-600 mb-4">{t("Next Step:")}</h2>
-            <p className="text-xl mb-6">{steps[activeStep].description}</p>
             <Button
               size="lg"
-              className="w-full bg-red-600 hover:bg-red-700 text-white text-xl py-6 px-8 rounded-lg shadow-md transition-colors duration-300"
-              onClick={() => setActiveStep((prev) => (prev + 1) % steps.length)}
+              className="w-full bg-[#002868] hover:bg-[#003c8c] text-white text-xl py-8 rounded-lg shadow-lg transition-colors duration-300"
+              onClick={() => handleClick(steps[activeStep])}
             >
-              {activeStep === steps.length - 1 ? t("Finish Checkout") : `${t('Start')} ${steps[activeStep].title}`}
+              {t("Start Scanning")} <ArrowRight className="ml-2 h-6 w-6" />
             </Button>
           </motion.div>
         </div>
 
-        <motion.div
-          className="md:w-1/2 relative rounded-2xl overflow-hidden shadow-2xl"
-          initial={{ opacity: 0, scale: 0.95 }}
-          animate={{ opacity: 1, scale: 1 }}
-          transition={{ duration: 0.5 }}
-        >
+        <div className="w-1/2 relative">
           <img
             src="https://img.freepik.com/free-photo/close-up-view-measuring-weight-fruit-supermarket_342744-1102.jpg?w=1060"
             alt="Self-checkout station"
             className="w-full h-full object-cover"
           />
-          <div className="absolute inset-0 bg-gradient-to-t from-red-600/80 to-transparent flex flex-col justify-end p-6">
-            <div className="text-white space-y-2">
-              <p className="text-3xl font-bold">{t("Today's Special Offer")}</p>
-              <p className="text-xl">{t("15% off orders over $200")}</p>
+          <div className="absolute inset-0 bg-gradient-to-t from-[#002868]/90 to-transparent flex flex-col justify-end p-8">
+            <div className="bg-[#FFD700] text-[#002868] p-6 rounded-lg shadow-lg max-w-md">
+              <p className="text-2xl font-bold mb-2">{t("Today's Special Offer")}</p>
+              <p className="text-xl font-semibold mb-1">{t("15% off orders over $200")}</p>
               <p className="text-sm opacity-80">
                 {t("*Limited time offer. See store for details.")}
               </p>
             </div>
           </div>
-        </motion.div>
+        </div>
       </main>
 
-      <footer className="bg-gray-100 py-4 text-center text-gray-600 text-sm">
+      <footer className="bg-[#002868] py-4 text-center text-white text-sm">
         {t("© 2024 Pegasus Self-Checkout. All rights reserved.")}
       </footer>
     </div>
