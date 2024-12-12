@@ -15,6 +15,7 @@ import { useNavigate } from "react-router-dom"
 import { useTranslation } from 'react-i18next'
 import { useDispatch, useSelector } from 'react-redux'
 import { setLanguage } from "../../redux/languageSlice"
+import '../utils/i18n'
 
 export default function SelfCheckout() {
   const { t, i18n } = useTranslation()
@@ -24,8 +25,18 @@ export default function SelfCheckout() {
   const [activeStep, setActiveStep] = useState(0)
   const [activeBox, setActiveBox] = useState("")
   const dispatch = useDispatch()
+
   useEffect(() => {
-    // Update activeBox text when language changes
+    const initializeLanguage = async () => {
+      await i18n.changeLanguage(currentLanguage.toLowerCase());
+      setLanguages(currentLanguage);
+      setActiveBox(t("Start Scanning"));
+    };
+
+    initializeLanguage();
+  }, [currentLanguage, i18n, t]);
+
+  useEffect(() => {
     setActiveBox(t("Start Scanning"))
   }, [languages, t])
 
@@ -61,13 +72,11 @@ export default function SelfCheckout() {
     },
   ]
 
-  const handleLanguageChange = (lang: string) => {
+  const handleLanguageChange = async (lang: string) => {
+    let normalizedLang = lang === 'عربي' ? 'ar' : lang.toLowerCase();
     setLanguages(lang)
-    if (lang === 'عربي') {
-      lang = "Arabic"
-    }
     dispatch(setLanguage(lang))
-    i18n.changeLanguage(lang.toLowerCase())
+    await i18n.changeLanguage(normalizedLang)
   }
 
   return (
